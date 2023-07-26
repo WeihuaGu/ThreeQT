@@ -1,5 +1,6 @@
 import baostock as bs
 import pandas as pd
+import datetime
 
 
 def onefactor(s_code):
@@ -9,9 +10,12 @@ def onefactor(s_code):
 # psTTM    滚动市销率
 # pcfNcfTTM    滚动市现率
 # pbMRQ    市净率
+    today=datetime.date.today();
+    # 计算三年前的日期
+    three_years_ago = today - datetime.timedelta(days=3*365)
     rs = bs.query_history_k_data_plus(s_code,
     "date,code,close,amount",
-    start_date='2022-01-01', end_date='2022-12-31', 
+    start_date=three_years_ago.strftime('%Y-%m-%d'), end_date=today.strftime('%Y-%m-%d'), 
     frequency="m", adjustflag="3")
     if rs.error_code!='0':
         print('query_history_k_data_plus respond  error_msg:'+rs.error_msg)
