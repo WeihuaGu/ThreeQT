@@ -3,7 +3,7 @@ import pandas as pd
 
 
 def onefactor(s_code):
-    bs.login()
+#### 调用前需执行bs.login ####
 #### 获取沪深A股估值指标(日频)数据 ####
 # peTTM    滚动市盈率
 # psTTM    滚动市销率
@@ -21,5 +21,4 @@ def onefactor(s_code):
     while (rs.error_code == '0') & rs.next():
         # 获取一条记录，将记录合并在一起
         result_list.append(rs.get_row_data())
-    bs.logout()
     return result_list;
