@@ -14,6 +14,14 @@ def getdebt(s_code,year, quarter):
     rs_balance = bs.query_balance_data(code=s_code, year=year, quarter=quarter)
     if rs_balance.error_code == '0':
         return rs_balance.get_row_data();
+def getTTM(s_code,date):
+    rs = bs.query_history_k_data_plus(s_code,
+    "peTTM,pbMRQ,psTTM,pcfNcfTTM",
+    start_date=date, end_date=date,
+    frequency="d", adjustflag="3")
+    result_list = []
+    if rs.error_code == '0':
+        return rs.get_row_data();
 
 
 def onefactor(s_code):
@@ -42,9 +50,12 @@ def onefactor(s_code):
             qcache[qstr]=lineq
         else:
             lineq = qcache[qstr]
-
         for lineqitem in range(len(lineq)-3):
             line.append(lineq[lineqitem+3]);
+
+        linettm = getTTM(s_code,line[0]);
+        for linettmitem in linettm:
+            line.append(linettmitem);
 
         # 获取一条记录，将记录合并在一起
         line[3]=int(int(line[3])/1000);
@@ -53,4 +64,4 @@ def onefactor(s_code):
     return result_list;
 
 def description():
-    return '日期，股票代码，收盘价，成交量（千股），成交额（万元）,流动比率,速动比率，现金比率，总负债同比增长率，资产负债率，权益乘数';
+    return '日期，股票代码，收盘价，成交量（千股），成交额（万元）,流动比率,速动比率，现金比率，总负债同比增长率，资产负债率，权益乘数,滚动市盈率,市净率，滚动市销率，滚动市现率';
