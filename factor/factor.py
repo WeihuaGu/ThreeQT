@@ -13,7 +13,13 @@ def month2quarter(m):
 def getdebt(s_code,year, quarter):
     rs_balance = bs.query_balance_data(code=s_code, year=year, quarter=quarter)
     if rs_balance.error_code == '0':
-        return rs_balance.get_row_data();
+        debtlist = rs_balance.get_row_data();
+        if len(debtlist)>0:
+            return debtlist;
+        else:
+            return ["","","","","","","","",""];
+    else:
+        return ["","","","","","","","",""];
 def getTTM(s_code,date):
     rs = bs.query_history_k_data_plus(s_code,
     "peTTM,pbMRQ,psTTM,pcfNcfTTM",
@@ -21,18 +27,25 @@ def getTTM(s_code,date):
     frequency="d", adjustflag="3")
     result_list = []
     if rs.error_code == '0':
-        return rs.get_row_data();
+        ttmlist = rs.get_row_data();
+        if len(ttmlist)>0:
+            return ttmlist;
+        else:
+            return ["","","",""];
+    else:
+        return ["","","",""];
 
 
 def onefactor(s_code):
 #### 调用前需执行bs.login ####
     # 计算三年前的日期
     today=datetime.date.today();
+    lastquarter = today - datetime.timedelta(days=3*30);
     three_years_ago = today - datetime.timedelta(days=3*365)
 
     rs = bs.query_history_k_data_plus(s_code,
     "date,code,close,volume,amount",
-    start_date=three_years_ago.strftime('%Y-%m-%d'), end_date=today.strftime('%Y-%m-%d'), 
+    start_date=three_years_ago.strftime('%Y-%m-%d'), end_date=lastquarter.strftime('%Y-%m-%d'), 
     frequency="m", adjustflag="3")
     if rs.error_code!='0':
         print('query_history_k_data_plus respond  error_msg:'+rs.error_msg)

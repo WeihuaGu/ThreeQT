@@ -1,3 +1,2 @@
-from indexlist import getIndexList;
-print(getIndexList.SZ);
-
+from cnredis import r
+print(r.smembers('index'));
