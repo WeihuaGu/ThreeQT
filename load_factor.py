@@ -20,6 +20,7 @@ def random_sleep(mu=1, sigma=0.4):
     secs = random.normalvariate(mu, sigma)
     if secs <= 0:
         secs = mu  # 太小则重置为平均值
+    print('sleep secs:'+str(secs));
     time.sleep(secs)
 
 # 定义一个函数来处理单个股票代码
@@ -35,8 +36,9 @@ def process_item(scode):
             onejson = json.dumps(one);
             r.lpush(faccode,onejson);
             print(onejson);
-        print('----------------------------------------');
+        print('-------------------------------------------------------------------------------------');
         print('\n');
+        random_sleep();
         return faccode;
     print('股票代码为'+scode+'的因子信息,redis list key 为'+faccode+' 已经写入过redis中');
     return faccode;
