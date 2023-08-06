@@ -1,10 +1,10 @@
-from cnredis import r;
+from datapreprocessing import getonelistfromredis
+from cnredis import r
 
 def pull():
     indexlist = r.smembers('index');
     for index in indexlist:
-        key = 'factor_'+index
-        oneindexlist = r.lrange(key,0,-1);
+        oneindexlist = getonelistfromredis(index);
         for one in oneindexlist:
             print(one);
 
